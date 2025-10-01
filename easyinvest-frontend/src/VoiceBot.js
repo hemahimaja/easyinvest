@@ -3,11 +3,11 @@ import axios from 'axios';
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-// 🌍 Auto-detect API base URL
+// 🌍 Auto-detect API base URL using environment
 const API_BASE_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000" // Local backend
-    : "https://easyinvest.onrender.com"; // Replace with your deployed backend
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000" // Local backend during `npm start`
+    : "https://easyinvest.onrender.com"; // Render backend for production
 
 function VoiceBot({ language, onBack }) {
   const [input, setInput] = useState('');
@@ -15,37 +15,43 @@ function VoiceBot({ language, onBack }) {
   const recognitionRef = useRef(null);
   const [isSpeechSupported, setIsSpeechSupported] = useState(true);
 
-  // 🔊 Speak text
-  const speak = (text) => {
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = language === 'telugu' ? 'te-IN' : 'en-IN';
-    window.speechSynthesis.speak(utter);
-  };
+  // 🔊 Speak text wrapped in useCallback (fixes warning)
+  const speak = useCallback(
+    (text) => {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = language === 'telugu' ? 'te-IN' : 'en-IN';
+      window.speechSynthesis.speak(utter);
+    },
+    [language]
+  );
 
   // ✅ Handle user input (text/voice)
-  const handleInput = useCallback(async (userText) => {
-    setChat((prev) => [...prev, { sender: 'user', text: userText }]);
+  const handleInput = useCallback(
+    async (userText) => {
+      setChat((prev) => [...prev, { sender: 'user', text: userText }]);
 
-    try {
-      const res = await axios.post(`${API_BASE_URL}/api/chat`, {
-        message: userText,
-        language,
-      });
+      try {
+        const res = await axios.post(`${API_BASE_URL}/api/chat`, {
+          message: userText,
+          language,
+        });
 
-      const botText = res.data.reply;
-      setChat((prev) => [...prev, { sender: 'bot', text: botText }]);
-      speak(botText);
-    } catch (error) {
-      console.error("Chatbot API Error:", error.message);
-      const errorMsg =
-        language === 'telugu'
-          ? 'సర్వర్ నుండి సమాధానం అందించలేకపోయాం.'
-          : 'Unable to get response from the server.';
-      setChat((prev) => [...prev, { sender: 'bot', text: errorMsg }]);
-    }
+        const botText = res.data.reply;
+        setChat((prev) => [...prev, { sender: 'bot', text: botText }]);
+        speak(botText);
+      } catch (error) {
+        console.error("Chatbot API Error:", error.message);
+        const errorMsg =
+          language === 'telugu'
+            ? 'సర్వర్ నుండి సమాధానం అందించలేకపోయాం.'
+            : 'Unable to get response from the server.';
+        setChat((prev) => [...prev, { sender: 'bot', text: errorMsg }]);
+      }
 
-    setInput('');
-  }, [language]);
+      setInput('');
+    },
+    [language, speak]
+  );
 
   // 🎤 Voice recognition setup
   useEffect(() => {
