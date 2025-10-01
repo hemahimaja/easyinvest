@@ -7,7 +7,7 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 const API_BASE_URL =
   window.location.hostname === "localhost"
     ? "http://localhost:5000" // Local backend
-    : "https://your-backend-url.onrender.com"; // Replace with your deployed backend
+    : "https://easyinvest.onrender.com"; // Replace with your deployed backend
 
 function VoiceBot({ language, onBack }) {
   const [input, setInput] = useState('');
