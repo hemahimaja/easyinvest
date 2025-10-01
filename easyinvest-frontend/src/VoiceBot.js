@@ -3,6 +3,12 @@ import axios from 'axios';
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+// 🌍 Auto-detect API base URL
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000" // Local backend
+    : "https://your-backend-url.onrender.com"; // Replace with your deployed backend
+
 function VoiceBot({ language, onBack }) {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState([]);
@@ -16,12 +22,12 @@ function VoiceBot({ language, onBack }) {
     window.speechSynthesis.speak(utter);
   };
 
-  // ✅ useCallback fix
+  // ✅ Handle user input (text/voice)
   const handleInput = useCallback(async (userText) => {
     setChat((prev) => [...prev, { sender: 'user', text: userText }]);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/chat', {
+      const res = await axios.post(`${API_BASE_URL}/api/chat`, {
         message: userText,
         language,
       });
@@ -30,6 +36,7 @@ function VoiceBot({ language, onBack }) {
       setChat((prev) => [...prev, { sender: 'bot', text: botText }]);
       speak(botText);
     } catch (error) {
+      console.error("Chatbot API Error:", error.message);
       const errorMsg =
         language === 'telugu'
           ? 'సర్వర్ నుండి సమాధానం అందించలేకపోయాం.'
@@ -40,7 +47,7 @@ function VoiceBot({ language, onBack }) {
     setInput('');
   }, [language]);
 
-  // 🎤 Set up voice recognition
+  // 🎤 Voice recognition setup
   useEffect(() => {
     if (!SpeechRecognition) {
       setIsSpeechSupported(false);

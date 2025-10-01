@@ -16,4 +16,14 @@ The app is bilingual (English & Telugu) and provides simple explanations of stoc
 ---
 
 ## 📂 Project Structure
-
+easyinvest/
+│
+├── easyinvest-backend/ # Node.js + Express backend
+│ ├── index.js # Main server file
+│ ├── package.json
+│ └── ...other files
+│
+└── easyinvest-frontend/ # React frontend
+├── src/
+├── package.json
+└── ...other files
