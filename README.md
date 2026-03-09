@@ -167,3 +167,7 @@ Push it to GitHub:
 git add README.md
 git commit -m "Updated project README"
 git push origin main
+
+## live links
+render-[https://easyinvestbycai23.netlify.app/](https://easyinvest-backend-1.onrender.com) \\backend link
+netlify-[https://easyinvestbycai23.netlify.app/](https://easyinvestbycai23.netlify.app/)  \\frontend link
