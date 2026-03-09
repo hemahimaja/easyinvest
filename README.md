@@ -37,18 +37,50 @@ Tools
 ---
 
 ## 📂 Project Structure
-easyinvest/
+EASYI...
 │
-├── easyinvest-backend/ # Node.js + Express backend
-│ ├── index.js
-│ ├── package.json
-│ └── ...
+├── .vscode
+│   └── settings.json
 │
-└── easyinvest-frontend/ # React frontend
-├── src/
-├── public/
-├── package.json
-└── ...
+├── easyinvest-backend
+│   ├── node_modules
+│   ├── .env
+│   ├── .gitignore
+│   ├── index.js
+│   ├── package-lock.json
+│   └── package.json
+│
+├── easyinvest-frontend
+│   ├── build
+│   ├── node_modules
+│   │
+│   ├── public
+│   │   ├── bg.jpg
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   │
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.js
+|   |   ├── Api.js
+│   │   ├── App.test.js
+│   │   ├── index.css
+│   │   ├── index.js
+│   │   ├── LearnBasics.js
+│   │   ├── OneTimeCalculator.js
+│   │   ├── SIPCalculator.js
+│   │   ├── SuggestedPlans.js
+│   │   ├── setupTests.js
+│   │   └── reportWebVitals.js
+│   │
+│   ├── .gitignore
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── README.md
+│   └── tailwind.config.js
 
 
 ---
